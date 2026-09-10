@@ -160,13 +160,13 @@ export function EscenaLineaTiempo({ expediente: D }: { expediente: Expediente })
             onTouchMove={(e) => scrubAt(e.touches[0].clientX)}
           >
             {fraccionTras !== null && (
-              <div className={styles.tras} style={{ left: `${fraccionTras * 100}%`, right: 0 }}>
+              <div className={styles.tras} style={{ left: `calc(var(--rlabw) + (100% - var(--rlabw)) * ${fraccionTras})`, right: 0 }}>
                 <span className={styles.trasEt}>
                   Sin ver por {C?.quien.toLowerCase()} desde el {C?.f && fmtD(C.f)} · <b>{diasSinConsulta} días</b>
                 </span>
               </div>
             )}
-            <div className={clsx(styles.cursor, pinned && styles.cursorPin)} style={t !== null ? { display: 'block', left: `${(X(dom, t) / W) * 100}%` } : undefined} />
+            <div className={clsx(styles.cursor, pinned && styles.cursorPin)} style={t !== null ? { display: 'block', left: `calc(var(--rlabw) + (100% - var(--rlabw)) * ${X(dom, t) / W})` } : undefined} />
 
             {/* fila: eventos */}
             <div className={styles.row}>
@@ -200,12 +200,14 @@ export function EscenaLineaTiempo({ expediente: D }: { expediente: Expediente })
                     <span className={styles.n}>{n}</span>
                     <span className={styles.u}>{n === 'Presión arterial' ? 'mmHg · barra S–D · verde: PAM del día (umbral 65)' : unidadFila(D, n)}</span>
                     <EtiquetaNow etq={etq} />
-                    <button type="button" className={styles.x} onClick={(e) => { e.stopPropagation(); quitarVar(n); }}>
-                      quitar
-                    </button>
-                    <button type="button" className={styles.x} style={{ marginLeft: 9 }} onClick={(e) => { e.stopPropagation(); abrir(n); }}>
-                      detalle
-                    </button>
+                    <span className={styles.acciones}>
+                      <button type="button" className={styles.x} onClick={(e) => { e.stopPropagation(); quitarVar(n); }}>
+                        quitar
+                      </button>
+                      <button type="button" className={styles.x} onClick={(e) => { e.stopPropagation(); abrir(n); }}>
+                        detalle
+                      </button>
+                    </span>
                   </div>
                   <div className={styles.plot} dangerouslySetInnerHTML={{ __html: svg }} />
                 </div>

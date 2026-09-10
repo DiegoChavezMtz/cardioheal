@@ -54,6 +54,25 @@ export type Estudio = {
 
 export type EcgLectura = { f: string; txt: string; src: string };
 
+// Estudios de laboratorio agrupados por panel, tal como los entrega el
+// laboratorio — a diferencia de `Labs`, que aplana todo a una serie por
+// marcador para línea de tiempo/consulta. Fuente: tabla estudios_lab (ver
+// datos/labs_raw.csv y scripts/subir_supabase.py).
+export type FlagLab = 'dentro' | 'sobre' | 'bajo' | null;
+
+export type ResultadoEstudioLab = {
+  panel: string;
+  analito: string;
+  valor: string;
+  unidad: string | null;
+  refBajo: string | null;
+  refAlto: string | null;
+  flag: FlagLab;
+  archivo: string;
+};
+
+export type EstudioLab = { fecha: string; resultados: ResultadoEstudioLab[] };
+
 export type Antecedentes = {
   Personales: string[];
   Familiares: string[];
@@ -105,6 +124,7 @@ export type Expediente = {
   eventos: Evento[];
   fevi: FeviValor[];
   estudios: Estudio[];
+  estudiosLab: EstudioLab[];
   ecg: EcgLectura[];
   antecedentes: Antecedentes;
   conflictos: Conflicto[];

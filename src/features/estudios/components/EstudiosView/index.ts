@@ -1,0 +1,1 @@
+export { EstudiosView } from './EstudiosView';

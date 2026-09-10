@@ -7,6 +7,7 @@ import styles from './NavPrincipal.module.css';
 const TABS = [
   { href: '/consulta', ic: '▤', n: 'Consulta', sub: 'El caso en una pantalla. Los módulos se agregan y se quitan con los chips de arriba.', listo: true },
   { href: '/linea-de-tiempo', ic: '⎓', n: 'Línea de tiempo', sub: 'Todo el expediente sobre un mismo eje de tiempo: eventos, medicamentos, signos y laboratorios.', listo: true },
+  { href: '/estudios', ic: '⚗', n: 'Estudios', sub: 'Cada estudio de laboratorio completo, como lo entrega el laboratorio, con opción de comparar contra otra fecha.', listo: true },
   { href: '/preguntar', ic: '?', n: 'Preguntar', sub: 'Preguntas en lenguaje natural, respondidas solo con los valores de este expediente.', listo: true },
   { href: '/actualizar', ic: '＋', n: 'Actualizar', sub: 'Agregar un estudio nuevo al expediente. Nada entra sin que lo confirmes.', listo: true },
 ] as const;

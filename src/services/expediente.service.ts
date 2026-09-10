@@ -4,9 +4,11 @@ import type {
   Antecedentes,
   ConsultaCardio,
   Estudio,
+  EstudioLab,
   Evento,
   Expediente,
   FeviValor,
+  FlagLab,
   GdmtFila,
   GlucosaLectura,
   Hueco,
@@ -49,6 +51,10 @@ type SignoConsultaRow = {
 };
 type HuecoRow = { desde: string; hasta: string; dias: number };
 type NotaCasaRow = { fecha: string; hora: string; texto: string };
+type EstudioLabRow = {
+  fecha: string; panel: string; analito: string; valor: string; unidad: string | null;
+  ref_bajo: string | null; ref_alto: string | null; flag: FlagLab; archivo: string;
+};
 
 async function capaClinica<T>(clave: string, porDefecto: T): Promise<T> {
   const { data, error } = await supabase()
@@ -88,6 +94,38 @@ async function cargarLabs(): Promise<Labs> {
   return labs;
 }
 
+// PostgREST limita cada respuesta a 1000 filas por defecto; estudios_lab ya
+// tiene ~1400. Pagina con .range() hasta agotar la tabla en vez de asumir
+// que un solo select trae todo (con una sola página se veían truncados los
+// estudios más viejos, a mitad de la fecha donde caía la fila 1000).
+const TAMANO_PAGINA = 1000;
+
+async function cargarEstudiosLab(): Promise<EstudioLab[]> {
+  const db = supabase();
+  const filas: EstudioLabRow[] = [];
+  for (let desde = 0; ; desde += TAMANO_PAGINA) {
+    const { data, error } = await db
+      .from('estudios_lab')
+      .select('fecha, panel, analito, valor, unidad, ref_bajo, ref_alto, flag, archivo')
+      .order('fecha', { ascending: false })
+      .range(desde, desde + TAMANO_PAGINA - 1)
+      .overrideTypes<EstudioLabRow[], { merge: false }>();
+    if (error) throw error;
+    filas.push(...(data ?? []));
+    if (!data || data.length < TAMANO_PAGINA) break;
+  }
+
+  const porFecha = new Map<string, EstudioLab>();
+  for (const r of filas) {
+    if (!porFecha.has(r.fecha)) porFecha.set(r.fecha, { fecha: r.fecha, resultados: [] });
+    porFecha.get(r.fecha)!.resultados.push({
+      panel: r.panel, analito: r.analito, valor: r.valor, unidad: r.unidad,
+      refBajo: r.ref_bajo, refAlto: r.ref_alto, flag: r.flag, archivo: r.archivo,
+    });
+  }
+  return [...porFecha.values()];
+}
+
 /**
  * Reconstruye el mismo objeto `D` que hoy consume consola.html, leyendo de
  * Supabase en vez de datos/datos.json. Se invoca una sola vez desde el
@@ -106,6 +144,7 @@ export const expedienteService = {
       eventos,
       fevi,
       estudios,
+      estudiosLab,
       ecg,
       signosConsulta,
       huecos,
@@ -128,6 +167,7 @@ export const expedienteService = {
       db.from('eventos').select('*').order('fecha', { ascending: true }).overrideTypes<EventoRow[], { merge: false }>(),
       db.from('fevi_valores').select('*').order('fecha', { ascending: true }).overrideTypes<FeviRow[], { merge: false }>(),
       db.from('estudios').select('*').order('fecha', { ascending: true }).overrideTypes<EstudioRow[], { merge: false }>(),
+      cargarEstudiosLab(),
       db.from('ecg_lecturas').select('*').order('fecha', { ascending: true }).overrideTypes<EcgRow[], { merge: false }>(),
       db.from('signos_consulta').select('*').order('fecha', { ascending: true }).overrideTypes<SignoConsultaRow[], { merge: false }>(),
       db.from('huecos_registro').select('desde, hasta, dias').order('desde', { ascending: true }).overrideTypes<HuecoRow[], { merge: false }>(),
@@ -173,6 +213,7 @@ export const expedienteService = {
       estudios: (estudios.data ?? []).map(
         (r): Estudio => ({ f: r.fecha, t: r.titulo, cat: r.categoria, hall: r.hallazgos, concl: r.conclusion, src: r.fuente }),
       ),
+      estudiosLab,
       ecg: (ecg.data ?? []).map((r) => ({ f: r.fecha, txt: r.texto, src: r.fuente })),
       antecedentes,
       conflictos,

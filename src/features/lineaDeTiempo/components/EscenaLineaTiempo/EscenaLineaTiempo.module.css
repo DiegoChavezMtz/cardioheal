@@ -68,6 +68,7 @@
 }
 
 .stack {
+  --rlabw: 172px;
   position: relative;
   background: var(--surface);
   border: 1px solid var(--line);
@@ -137,9 +138,14 @@
   color: var(--red);
 }
 
-.x {
+.acciones {
+  display: flex;
   align-self: flex-start;
+  gap: 9px;
   margin-top: 2px;
+}
+
+.x {
   font-size: 11px;
   color: var(--muted);
   background: none;
@@ -429,6 +435,9 @@
 }
 
 @media (max-width: 900px) {
+  .stack {
+    --rlabw: 0px;
+  }
   .row {
     display: block;
   }
@@ -452,7 +461,7 @@
   .lanes {
     display: none !important;
   }
-  .x {
+  .acciones {
     margin-left: 8px;
   }
   .axis {
