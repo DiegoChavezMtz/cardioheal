@@ -18,7 +18,7 @@ export function calcularResumenes(estudiosLab: EstudioLab[]): ResumenEstudioLab[
       fecha: e.fecha,
       total: e.resultados.length,
       fueraDeRango: e.resultados.filter((r) => r.flag === 'sobre' || r.flag === 'bajo').length,
-      categorias: ordenarCategorias([...new Set(e.resultados.map((r) => categoriaDe(r.panel)))]),
+      categorias: ordenarCategorias([...new Set(e.resultados.map((r) => categoriaDe(r.panel, r.analito)))]),
       archivos: [...new Set(e.resultados.map((r) => r.archivo))],
     }));
 }

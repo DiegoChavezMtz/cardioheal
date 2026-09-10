@@ -1,0 +1,1 @@
+export { RegistroConsulta } from './RegistroConsulta';

@@ -2,17 +2,16 @@
 
 import { useMemo, useState } from 'react';
 import { Chip } from '@/components/atoms/Chip';
-import type { Expediente, EstudioLab, FlagLab } from '@/types/expediente';
+import type { Expediente, EstudioLab } from '@/types/expediente';
 import { ago, fmtD, nf } from '@/utils/expediente.utils';
 import { iconoCategoria } from '../../utils/categorias.utils';
-import { compararEstudios } from '../../utils/comparar.utils';
+import { compararEstudios, type Estado } from '../../utils/comparar.utils';
 import styles from './DetalleEstudio.module.css';
 
-function EstadoFlag({ flag }: { flag: FlagLab }) {
-  if (flag === 'sobre') return <span className={styles.badgeFuera}>▲ sobre</span>;
-  if (flag === 'bajo') return <span className={styles.badgeFuera}>▼ bajo</span>;
-  if (flag === 'dentro') return <span className={styles.badgeOk}>en rango</span>;
-  return <span className={styles.badgeNeutro}>sin referencia</span>;
+const badgePorTipo = { ok: styles.badgeOk, fuera: styles.badgeFuera, neutro: styles.badgeNeutro } as const;
+
+function EstadoFlag({ estado }: { estado: Estado }) {
+  return <span className={badgePorTipo[estado.tipo]}>{estado.texto}</span>;
 }
 
 export function DetalleEstudio({
@@ -135,7 +134,7 @@ export function DetalleEstudio({
                       </td>
                     )}
                     <td className={styles.n}>
-                      <EstadoFlag flag={f.flag} />
+                      <EstadoFlag estado={f.estado} />
                     </td>
                   </tr>
                 ))}

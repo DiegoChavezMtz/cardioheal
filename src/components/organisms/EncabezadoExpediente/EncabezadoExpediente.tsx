@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import clsx from 'clsx';
 import { Logo } from '@/components/atoms/Logo';
+import { RegistroConsulta } from '@/components/organisms/RegistroConsulta';
 import type { Expediente } from '@/types/expediente';
 import { fmtS } from '@/utils/expediente.utils';
 import styles from './EncabezadoExpediente.module.css';
@@ -32,6 +33,7 @@ export function EncabezadoExpediente({ expediente }: { expediente: Expediente })
         <button type="button" className={styles.print} onClick={() => window.print()}>
           Imprimir
         </button>
+        <RegistroConsulta expediente={expediente} />
         <div className={styles.pt}>
           <div className={styles.nm}>Antonio Velázquez Rocha</div>
           <div className={styles.mt}>

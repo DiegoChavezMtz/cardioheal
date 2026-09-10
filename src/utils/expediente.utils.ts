@@ -23,6 +23,8 @@ export const fmtS = (f: string) => {
 /** Días transcurridos entre `f` y la fecha de corte del expediente (D.hoy). */
 export const ago = (D: Expediente, f: string) => Math.round((day(D.hoy) - day(f)) / MS);
 
+export const pam = (s: number, d: number) => Math.round((s + 2 * d) / 3);
+
 export const nf = (v: number) => {
   const s = Math.abs(v) >= 100 ? v.toFixed(0) : Math.abs(v) >= 10 ? v.toFixed(1) : v.toFixed(2);
   return s.indexOf('.') < 0 ? s : s.replace(/0+$/, '').replace(/\.$/, '');

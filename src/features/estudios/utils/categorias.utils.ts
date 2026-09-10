@@ -22,6 +22,34 @@ const REGLAS: Array<{ prueba: RegExp; categoria: string }> = [
   { prueba: /HECES|\(FIT\)/i, categoria: 'Sangre oculta en heces' },
 ];
 
+// El panel "QUIMICA (SANGUINEA) DE N ELEMENTOS" es un solo panel de
+// laboratorio que bundlea decenas de analitos de sistemas distintos (hígado,
+// lípidos, riñón, hierro, glucosa...). El nombre del panel no lo delata, así
+// que para separarlos en los perfiles clínicos reales hace falta mirar el
+// nombre del analito. Solo se aplica para refinar el resultado "Química
+// sanguínea"; el resto de las categorías ya vienen bien identificadas por
+// panel. Confirmado contra los analitos únicos en datos/labs_raw.csv.
+const SUBREGLAS_QUIMICA: Array<{ prueba: RegExp; categoria: string }> = [
+  {
+    // "Bilirrunina" es un typo real del laboratorio por "Bilirrubina".
+    prueba: /BILIRRUB|BILIRRUNINA|^TGO|^TGP|TRANSAMINASA|FOSFATASA ALCALINA|GAMA GLUTAMIL|GAMMA GLUTAMIL|ALB[UÚ]MINA|GLOBULINA/i,
+    categoria: 'Perfil hepático',
+  },
+  {
+    prueba: /COLESTEROL|^HDL|^LDL|^VLDL|LIPOPROTEINA|TRIGLICERIDO|ATEROG[EÉ]N|L[IÍ]PIDOS TOTALES|LDL\/HDL/i,
+    categoria: 'Perfil de lípidos',
+  },
+  {
+    prueba: /^UREA$|^BUN|NITROGENO UREICO|CREATININA|ACIDO [UÙÚ]RICO|FILTRADO GLOMERULAR|BUN\/CREATININA/i,
+    categoria: 'Función renal',
+  },
+  { prueba: /GLUCOSA|INSULINA|[IÍ]NDICE HOMA/i, categoria: 'Control glucémico' },
+  {
+    prueba: /HIERRO S[EÉ]RICO|TRANSFERRINA|FIJACION DE HIERRO|INDICE DE SATURACION/i,
+    categoria: 'Metabolismo de hierro',
+  },
+];
+
 const OTROS_ESTUDIOS = 'Otros estudios';
 
 // Orden de despliegue: primero lo más solicitado/clínicamente relevante para
@@ -49,8 +77,10 @@ const ICONOS: Record<string, string> = {
   [OTROS_ESTUDIOS]: '·',
 };
 
-export function categoriaDe(panel: string): string {
-  return REGLAS.find((r) => r.prueba.test(panel))?.categoria ?? OTROS_ESTUDIOS;
+export function categoriaDe(panel: string, analito?: string): string {
+  const categoria = REGLAS.find((r) => r.prueba.test(panel))?.categoria ?? OTROS_ESTUDIOS;
+  if (categoria !== 'Química sanguínea' || !analito) return categoria;
+  return SUBREGLAS_QUIMICA.find((r) => r.prueba.test(analito))?.categoria ?? categoria;
 }
 
 export function ordenCategoria(categoria: string): number {

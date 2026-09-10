@@ -1,0 +1,9 @@
+.root {
+  font-size: 13px;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  background: var(--sunk);
+  color: var(--ink);
+  border-radius: 6px;
+  width: 100%;
+}

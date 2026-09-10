@@ -149,3 +149,32 @@ export type NuevoValorConfirmado = {
   unidad: string;
   origen: string;
 };
+
+// Lo que escribe "Registrar en consulta" — captura estructurada en vivo
+// durante la visita, directo a las tablas finales (no pasa por una tabla de
+// "confirmadas": aquí no hay ambigüedad de OCR que confirmar).
+export type NuevoSignoConsulta = {
+  fecha: string;
+  sistolica: number | null;
+  diastolica: number | null;
+  pulso: number | null;
+  saturacion: number | null;
+  peso: number | null;
+};
+
+export type NuevaObservacion = {
+  fecha: string;
+  tipo: string;
+  detalle: string;
+};
+
+export type AccionTratamiento = 'inicia' | 'sube' | 'baja' | 'suspende';
+
+export type NuevoTratamiento = {
+  fecha: string;
+  farmaco: string;
+  grupo: string | null; // null si el fármaco ya existe: se toma el grupo de su fila activa
+  accion: AccionTratamiento;
+  dosis: string | null; // requerido salvo cuando accion === 'suspende'
+  porQue: string;
+};

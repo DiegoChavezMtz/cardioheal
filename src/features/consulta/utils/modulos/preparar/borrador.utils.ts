@@ -1,5 +1,5 @@
 import type { Expediente } from '@/types/expediente';
-import { day, fmtD, MS, pamStats } from '@/utils/expediente.utils';
+import { day, fmtD, MS, pam, pamStats } from '@/utils/expediente.utils';
 
 function tablaMD(cab: string[], filas: (string | number)[][]): string {
   return `| ${cab.join(' | ')} |\n| ${cab.map(() => '---').join(' | ')} |\n${filas.map((r) => `| ${r.join(' | ')} |`).join('\n')}`;
@@ -62,7 +62,7 @@ export function borradorMD(D: Expediente): string {
     tablaMD(
       ['Fecha', 'TA (mmHg)', 'PAM', 'FC', 'SpO₂', 'Peso'],
       D.signos_consulta.map((x) => [
-        fmtD(x.f), `${x.s || ''}/${x.d || ''}`, x.s != null && x.d != null ? Math.round((x.s + 2 * x.d) / 3) : '—', x.p || '—', `${x.o || '—'}%`, `${x.peso || '—'} kg`,
+        fmtD(x.f), `${x.s || ''}/${x.d || ''}`, x.s != null && x.d != null ? pam(x.s, x.d) : '—', x.p || '—', `${x.o || '—'}%`, `${x.peso || '—'} kg`,
       ]),
     ),
   );

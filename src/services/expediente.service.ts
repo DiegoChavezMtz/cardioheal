@@ -16,6 +16,9 @@ import type {
   LabsNotas,
   Medicamento,
   NotaCasa,
+  NuevaObservacion,
+  NuevoSignoConsulta,
+  NuevoTratamiento,
   Patron,
   PesoLectura,
   PresionLectura,
@@ -242,5 +245,80 @@ export const expedienteService = {
       origen: input.origen,
     });
     if (error) throw error;
+  },
+
+  /** Escritura de la pestaña "Signos de hoy" de Registrar en consulta. */
+  async registrarSignos(input: NuevoSignoConsulta) {
+    const { error } = await supabase().from('signos_consulta').insert({
+      fecha: input.fecha,
+      sistolica: input.sistolica,
+      diastolica: input.diastolica,
+      pulso: input.pulso,
+      saturacion: input.saturacion,
+      peso: input.peso,
+      fuente: 'Registrado en consulta',
+    });
+    if (error) throw error;
+  },
+
+  /** Escritura de la pestaña "Observación": se refleja en la línea de tiempo como evento. */
+  async registrarObservacion(input: NuevaObservacion) {
+    const { error } = await supabase().from('eventos').insert({
+      fecha: input.fecha,
+      titulo: input.tipo,
+      detalle: input.detalle,
+      peso: 'medio',
+      fuente: 'Registrado en consulta',
+    });
+    if (error) throw error;
+  },
+
+  /**
+   * Escritura de la pestaña "Tratamiento". Para que la línea de tiempo no
+   * dibuje dos barras vigentes del mismo fármaco a la vez, cierra la fila
+   * activa (fin = null) antes de abrir una nueva — salvo "inicia", que no
+   * tiene fila previa que cerrar. "suspende" solo cierra, no inserta.
+   */
+  async registrarTratamiento(input: NuevoTratamiento) {
+    const db = supabase();
+
+    if (input.accion !== 'inicia') {
+      const { data: activa, error: eBusca } = await db
+        .from('medicamentos')
+        .select('id')
+        .eq('farmaco', input.farmaco)
+        .is('fin', null)
+        .limit(1);
+      if (eBusca) throw eBusca;
+      if (activa?.[0]) {
+        const { error: eCierra } = await db.from('medicamentos').update({ fin: input.fecha }).eq('id', activa[0].id);
+        if (eCierra) throw eCierra;
+      }
+    }
+
+    if (input.accion === 'suspende') return;
+
+    let grupo = input.grupo;
+    if (!grupo) {
+      const { data: previo, error: eGrupo } = await db
+        .from('medicamentos')
+        .select('grupo')
+        .eq('farmaco', input.farmaco)
+        .order('inicio', { ascending: false })
+        .limit(1);
+      if (eGrupo) throw eGrupo;
+      grupo = previo?.[0]?.grupo ?? 'Sin clasificar';
+    }
+
+    const { error: eInserta } = await db.from('medicamentos').insert({
+      grupo,
+      farmaco: input.farmaco,
+      dosis: input.dosis ?? '',
+      inicio: input.fecha,
+      fin: null,
+      fuente: input.porQue ? `Registrado en consulta — ${input.porQue}` : 'Registrado en consulta',
+      confianza: 'documentado',
+    });
+    if (eInserta) throw eInserta;
   },
 };
