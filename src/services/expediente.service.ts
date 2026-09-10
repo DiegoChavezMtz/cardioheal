@@ -103,6 +103,22 @@ async function cargarLabs(): Promise<Labs> {
 // estudios más viejos, a mitad de la fecha donde caía la fila 1000).
 const TAMANO_PAGINA = 1000;
 
+// La columna `flag` de estudios_lab viene del PDF del laboratorio y casi
+// siempre llega vacía (solo ~130 de 1400 filas la traen), aunque el rango de
+// referencia sí esté capturado en ref_bajo/ref_alto. Sin este cálculo, "solo
+// fuera de rango" y los contadores de "N fuera de rango" quedan casi
+// siempre en cero aunque sí haya con qué comparar.
+function calcularFlag(valor: string, refBajo: string | null, refAlto: string | null): FlagLab {
+  if (refBajo === null || refAlto === null) return null;
+  const v = Number.parseFloat(valor);
+  const bajo = Number.parseFloat(refBajo);
+  const alto = Number.parseFloat(refAlto);
+  if (!Number.isFinite(v) || !Number.isFinite(bajo) || !Number.isFinite(alto)) return null;
+  if (v < bajo) return 'bajo';
+  if (v > alto) return 'sobre';
+  return 'dentro';
+}
+
 async function cargarEstudiosLab(): Promise<EstudioLab[]> {
   const db = supabase();
   const filas: EstudioLabRow[] = [];
@@ -123,7 +139,9 @@ async function cargarEstudiosLab(): Promise<EstudioLab[]> {
     if (!porFecha.has(r.fecha)) porFecha.set(r.fecha, { fecha: r.fecha, resultados: [] });
     porFecha.get(r.fecha)!.resultados.push({
       panel: r.panel, analito: r.analito, valor: r.valor, unidad: r.unidad,
-      refBajo: r.ref_bajo, refAlto: r.ref_alto, flag: r.flag, archivo: r.archivo,
+      refBajo: r.ref_bajo, refAlto: r.ref_alto,
+      flag: r.flag ?? calcularFlag(r.valor, r.ref_bajo, r.ref_alto),
+      archivo: r.archivo,
     });
   }
   return [...porFecha.values()];
