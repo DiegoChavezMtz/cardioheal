@@ -1,7 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Chip } from '@/components/atoms/Chip';
 import { Hint } from '@/components/atoms/Hint';
 import { useDetalle } from '@/context/DetalleContext';
@@ -54,6 +54,8 @@ export function EscenaLineaTiempo({ expediente: D }: { expediente: Expediente })
   const [hoverT, setHoverT] = useState<number | null>(null);
 
   const stackRef = useRef<HTMLDivElement>(null);
+  const trasRef = useRef<HTMLDivElement>(null);
+  const [trasWidth, setTrasWidth] = useState(0);
   const candidatas = useMemo(() => fechasCandidatas(D), [D]);
 
   const t = pinned ? day(pinned) : hoverT;
@@ -113,6 +115,25 @@ export function EscenaLineaTiempo({ expediente: D }: { expediente: Expediente })
   const fraccionTras = C?.f && day(C.f) >= dom[0] && day(C.f) <= dom[1] ? (day(C.f) - dom[0]) / (dom[1] - dom[0]) : null;
   const diasSinConsulta = C?.f ? ago(D, C.f) : 0;
 
+  // ancho real disponible a la derecha de la línea ámbar — portado de
+  // placeTras(): el texto se acorta en 4 niveles según ese ancho.
+  useEffect(() => {
+    const el = trasRef.current;
+    if (!el) { setTrasWidth(0); return; }
+    const ro = new ResizeObserver(([entry]) => setTrasWidth(entry.contentRect.width));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [fraccionTras]);
+
+  const etiquetaTras = (() => {
+    if (!C?.f) return null;
+    const w = trasWidth;
+    if (w >= 330) return <>Sin ver por {C.quien.toLowerCase()} desde el {fmtD(C.f)} · <b>{diasSinConsulta} días</b></>;
+    if (w >= 190) return <>Sin consulta · <b>{diasSinConsulta} días</b></>;
+    if (w >= 95) return <><b>{diasSinConsulta} d</b> sin consulta</>;
+    return <b>{diasSinConsulta} d</b>;
+  })();
+
   return (
     <div>
       <div className={styles.barCtl}>
@@ -160,10 +181,8 @@ export function EscenaLineaTiempo({ expediente: D }: { expediente: Expediente })
             onTouchMove={(e) => scrubAt(e.touches[0].clientX)}
           >
             {fraccionTras !== null && (
-              <div className={styles.tras} style={{ left: `calc(var(--rlabw) + (100% - var(--rlabw)) * ${fraccionTras})`, right: 0 }}>
-                <span className={styles.trasEt}>
-                  Sin ver por {C?.quien.toLowerCase()} desde el {C?.f && fmtD(C.f)} · <b>{diasSinConsulta} días</b>
-                </span>
+              <div ref={trasRef} className={styles.tras} style={{ left: `calc(var(--rlabw) + (100% - var(--rlabw)) * ${fraccionTras})`, right: 0 }}>
+                <span className={styles.trasEt}>{etiquetaTras}</span>
               </div>
             )}
             <div className={clsx(styles.cursor, pinned && styles.cursorPin)} style={t !== null ? { display: 'block', left: `calc(var(--rlabw) + (100% - var(--rlabw)) * ${X(dom, t) / W})` } : undefined} />

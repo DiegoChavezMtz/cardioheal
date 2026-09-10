@@ -296,9 +296,23 @@ export const expedienteService = {
    * dibuje dos barras vigentes del mismo fármaco a la vez, cierra la fila
    * activa (fin = null) antes de abrir una nueva — salvo "inicia", que no
    * tiene fila previa que cerrar. "suspende" solo cierra, no inserta.
+   * "mantiene" no toca medicamentos (no hay nada que cerrar ni insertar):
+   * solo deja constancia como evento, para no perder el motivo de la revisión.
    */
   async registrarTratamiento(input: NuevoTratamiento) {
     const db = supabase();
+
+    if (input.accion === 'mantiene') {
+      const { error } = await db.from('eventos').insert({
+        fecha: input.fecha,
+        titulo: 'Tratamiento sin cambios',
+        detalle: input.porQue ? `${input.farmaco} — ${input.porQue}` : `${input.farmaco}: se revisó y se mantiene.`,
+        peso: 'bajo',
+        fuente: 'Registrado en consulta',
+      });
+      if (error) throw error;
+      return;
+    }
 
     if (input.accion !== 'inicia') {
       const { data: activa, error: eBusca } = await db

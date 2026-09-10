@@ -168,13 +168,13 @@ export type NuevaObservacion = {
   detalle: string;
 };
 
-export type AccionTratamiento = 'inicia' | 'sube' | 'baja' | 'suspende';
+export type AccionTratamiento = 'inicia' | 'sube' | 'baja' | 'suspende' | 'mantiene';
 
 export type NuevoTratamiento = {
   fecha: string;
   farmaco: string;
   grupo: string | null; // null si el fármaco ya existe: se toma el grupo de su fila activa
   accion: AccionTratamiento;
-  dosis: string | null; // requerido salvo cuando accion === 'suspende'
+  dosis: string | null; // requerido salvo cuando accion es 'suspende' o 'mantiene'
   porQue: string;
 };

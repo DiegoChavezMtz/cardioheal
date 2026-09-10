@@ -20,6 +20,7 @@ const ACCIONES: Array<{ v: AccionTratamiento; n: string }> = [
   { v: 'inicia', n: 'se inicia' },
   { v: 'sube', n: 'se sube la dosis' },
   { v: 'baja', n: 'se baja la dosis' },
+  { v: 'mantiene', n: 'se mantiene' },
   { v: 'suspende', n: 'se suspende' },
 ];
 
@@ -250,7 +251,7 @@ function FormTratamiento({ expediente, onGuardado }: { expediente: Expediente; o
   const farmacos = useMemo(() => [...new Set(expediente.meds.map((m) => m.farmaco))].sort(), [expediente.meds]);
   const grupos = useMemo(() => [...new Set(expediente.meds.map((m) => m.grupo))].sort(), [expediente.meds]);
   const esFarmacoNuevo = farmaco.trim() !== '' && !farmacos.some((f) => f.toLowerCase() === farmaco.trim().toLowerCase());
-  const necesitaDosis = accion !== 'suspende';
+  const necesitaDosis = accion !== 'suspende' && accion !== 'mantiene';
   const puedeGuardar = farmaco.trim() && (!necesitaDosis || dosis.trim()) && (!esFarmacoNuevo || grupoNuevo.trim());
 
   async function guardar() {
