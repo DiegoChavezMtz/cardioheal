@@ -1,0 +1,1 @@
+export { PasoTres } from './PasoTres';

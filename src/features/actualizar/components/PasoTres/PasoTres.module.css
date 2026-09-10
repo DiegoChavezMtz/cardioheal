@@ -1,0 +1,53 @@
+.mod {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--sh);
+  overflow: hidden;
+}
+
+.body {
+  padding: 14px 16px;
+}
+
+.kv {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 4px 0;
+  font-size: 13px;
+  align-items: baseline;
+}
+
+.k {
+  color: var(--ink-2);
+}
+
+.v {
+  white-space: nowrap;
+  font-family: var(--m);
+}
+
+.pie {
+  margin: 10px 0 0;
+}
+
+.vacio {
+  border: 1px dashed var(--line);
+  border-radius: 9px;
+  padding: 16px 18px;
+  background: var(--sunk);
+}
+
+.vacio b {
+  display: block;
+  font-size: 13.5px;
+  color: var(--ink-2);
+  margin-bottom: 4px;
+}
+
+.vacio span {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.55;
+}

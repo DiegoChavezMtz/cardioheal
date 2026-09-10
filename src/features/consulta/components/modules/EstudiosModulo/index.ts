@@ -1,0 +1,1 @@
+export { EstudiosModulo } from './EstudiosModulo';

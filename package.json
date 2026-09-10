@@ -6,12 +6,18 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm run lint",
+    "new:feature": "bash scripts/new-feature.sh"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.116.0",
+    "clsx": "^2.1.1",
     "next": "16.3.4",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -19,6 +25,8 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
-    "typescript": "^5"
+    "eslint-plugin-boundaries": "^7.2.0",
+    "typescript": "^5",
+    "zod": "^4.6.1"
   }
 }

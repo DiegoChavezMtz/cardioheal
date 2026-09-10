@@ -1,0 +1,45 @@
+.chat {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 16px;
+  align-items: start;
+}
+
+.mod {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--sh);
+  overflow: hidden;
+}
+
+.mod h2 {
+  margin: 0;
+  padding: 12px 16px;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  font-weight: 800;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-2);
+}
+
+.body {
+  padding: 14px 16px;
+  line-height: 1.65;
+}
+
+.body p {
+  margin: 0 0 10px;
+}
+
+.body p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 1080px) {
+  .chat {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

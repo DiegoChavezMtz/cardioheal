@@ -1,0 +1,1 @@
+export { NavPrincipal } from './NavPrincipal';

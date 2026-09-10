@@ -1,0 +1,21 @@
+.t {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.t td {
+  border-bottom: 1px solid var(--line-soft);
+  padding: 7px 10px 7px 0;
+  vertical-align: top;
+}
+
+.k {
+  color: var(--muted);
+  width: 36%;
+}
+
+.pie {
+  margin: 10px 0 0;
+  line-height: 1.55;
+}

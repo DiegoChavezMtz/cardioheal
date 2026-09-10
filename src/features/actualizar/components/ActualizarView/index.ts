@@ -1,0 +1,1 @@
+export { ActualizarView } from './ActualizarView';

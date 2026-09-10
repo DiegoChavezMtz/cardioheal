@@ -1,0 +1,36 @@
+.root {
+  font-size: 12.5px;
+  padding: 5px 12px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.root:hover {
+  border-color: var(--blue);
+  color: var(--blue-2);
+}
+
+/* variante "toggle" (selección múltiple, ej. chips de módulos): fondo azul
+   tenue + check al frente cuando está presionado */
+.toggle[aria-pressed='true'] {
+  background: rgba(59, 142, 245, 0.14);
+  border-color: var(--blue);
+  color: var(--blue-2);
+}
+
+.toggle[aria-pressed='true']::before {
+  content: '✓ ';
+  font-weight: 800;
+}
+
+/* variante "solido" (selección única, ej. presets o rangos): azul sólido cuando está presionado */
+.solido[aria-pressed='true'] {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #03080f;
+  font-weight: 800;
+}

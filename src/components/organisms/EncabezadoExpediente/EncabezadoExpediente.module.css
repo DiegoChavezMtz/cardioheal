@@ -1,0 +1,82 @@
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 15px 0 11px;
+  border-bottom: 1px solid var(--line);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: none;
+  border: 0;
+  padding: 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+.print {
+  font-size: 12.5px;
+  padding: 5px 12px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.print:hover {
+  border-color: var(--blue);
+  color: var(--blue-2);
+}
+
+.pt {
+  margin-left: auto;
+  text-align: right;
+  min-width: 0;
+}
+
+.nm {
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.mt {
+  font-size: 12px;
+  color: var(--muted);
+  font-family: var(--m);
+}
+
+.version {
+  color: var(--blue-2);
+}
+
+.dx {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 11px 0 0;
+}
+
+.dx span {
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: var(--ink-2);
+  border: 1px solid var(--line);
+  padding: 3px 9px;
+  border-radius: 20px;
+  background: var(--surface);
+  font-weight: 600;
+}
+
+.hot {
+  border-color: rgba(226, 58, 58, 0.5) !important;
+  color: #ff9c9c !important;
+  background: var(--red-soft) !important;
+}

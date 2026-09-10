@@ -1,0 +1,1 @@
+export { PatronesModulo } from './PatronesModulo';

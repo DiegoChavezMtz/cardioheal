@@ -1,0 +1,1 @@
+export { EscenaBienvenida } from './EscenaBienvenida';

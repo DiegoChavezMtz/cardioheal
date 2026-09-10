@@ -1,0 +1,1 @@
+export { RiesgoModulo } from './RiesgoModulo';

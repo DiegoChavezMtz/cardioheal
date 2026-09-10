@@ -1,0 +1,1 @@
+export { EncabezadoExpediente } from './EncabezadoExpediente';

@@ -1,0 +1,37 @@
+.conf {
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--amber);
+  border-radius: 6px;
+  padding: 11px 13px;
+  margin-bottom: 9px;
+  background: var(--surface-2);
+}
+
+.conf:last-child {
+  margin-bottom: 0;
+}
+
+.ct {
+  font-weight: 800;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.cv {
+  font-size: 12.5px;
+  font-family: var(--m);
+  color: var(--ink-2);
+  padding: 3px 0;
+}
+
+.cn {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+.pie {
+  margin: 11px 0 0;
+  line-height: 1.55;
+}

@@ -1,0 +1,82 @@
+.prop {
+  padding: 13px 15px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--amber);
+  border-radius: 8px;
+  margin-bottom: 9px;
+  background: var(--surface);
+}
+
+.prop:last-child {
+  margin-bottom: 0;
+}
+
+.r {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: baseline;
+  font-size: 14.5px;
+}
+
+.num {
+  font-family: var(--m);
+}
+
+.why {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-top: 5px;
+  line-height: 1.5;
+}
+
+.fuente {
+  color: var(--blue-2);
+}
+
+.acts {
+  display: flex;
+  gap: 7px;
+  margin-top: 9px;
+}
+
+.acts button {
+  font-size: 12px;
+  padding: 5px 13px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--sunk);
+  color: var(--muted);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.acts button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.yes {
+  border-color: var(--ok) !important;
+  color: var(--ok) !important;
+}
+
+.vacio {
+  border: 1px dashed var(--line);
+  border-radius: 9px;
+  padding: 16px 18px;
+  background: var(--sunk);
+}
+
+.vacio b {
+  display: block;
+  font-size: 13.5px;
+  color: var(--ink-2);
+  margin-bottom: 4px;
+}
+
+.vacio span {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.55;
+}

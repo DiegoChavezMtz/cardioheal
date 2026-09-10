@@ -1,0 +1,21 @@
+.root {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.icon {
+  filter: drop-shadow(0 0 14px var(--glow));
+}
+
+.wordmark {
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  font-size: 12.5px;
+  text-transform: uppercase;
+}
+
+.wordmark i {
+  font-style: normal;
+  color: var(--red);
+}

@@ -1,0 +1,1 @@
+export { AntecedentesModulo } from './AntecedentesModulo';

@@ -1,0 +1,79 @@
+.mod {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--sh);
+  grid-column: span 12;
+  overflow: hidden;
+}
+
+.half {
+  grid-column: span 6;
+}
+
+.third {
+  grid-column: span 4;
+}
+
+.twoThirds {
+  grid-column: span 8;
+}
+
+@media (max-width: 1080px) {
+  .half,
+  .third,
+  .twoThirds {
+    grid-column: span 12;
+  }
+}
+
+.h2 {
+  margin: 0;
+  padding: 12px 16px;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  font-weight: 800;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface-2);
+}
+
+.h2 em {
+  font-style: normal;
+  font-size: 12px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.mtools {
+  display: flex;
+  gap: 2px;
+  flex: none;
+}
+
+.mtools button {
+  background: none;
+  border: 0;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 2px 6px;
+  font-size: 13px;
+  line-height: 1;
+  border-radius: 4px;
+}
+
+.mtools button:hover {
+  color: var(--blue-2);
+  background: var(--raise);
+}
+
+.body {
+  padding: 14px 16px;
+}
